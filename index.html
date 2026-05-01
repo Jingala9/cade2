@@ -1,0 +1,427 @@
+bash
+
+cd /home/claude && python3 << 'EOF'
+import json
+
+with open('/home/claude/imgs_compressed.json') as f:
+    imgs = json.load(f)
+
+hero_src = f"data:image/jpeg;base64,{imgs['hero']}"
+portrait_src = f"data:image/jpeg;base64,{imgs['portrait']}"
+p = [f"data:image/jpeg;base64,{x}" for x in imgs['portfolio']]
+
+html = f'''<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aisha Abbas — Luxury UGC Content Creator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400;500&family=Great+Vibes&family=Tenor+Sans&display=swap" rel="stylesheet">
+<style>
+:root {{
+  --bg:#f4ede4; --cream:#faf6f0; --sand:#e6d9cc;
+  --brown:#3a2718; --brown-l:#6b4a36;
+  --gold:#b8915a; --gold-l:#d4aa78;
+  --muted:#8a7060; --white:#ffffff;
+}}
+*{{margin:0;padding:0;box-sizing:border-box}}
+html{{scroll-behavior:smooth}}
+body{{background:var(--bg);color:var(--brown);font-family:'Jost',sans-serif;font-weight:300;overflow-x:hidden}}
+
+/* NAV */
+nav{{position:fixed;top:0;left:0;right:0;z-index:100;padding:1rem 2.5rem;display:flex;align-items:center;justify-content:space-between;transition:background .5s}}
+nav.sc{{background:rgba(244,237,228,.93);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(184,145,90,.12)}}
+.nl{{font-family:'Great Vibes',cursive;font-size:1.4rem;color:var(--white);text-decoration:none;transition:color .5s}}
+nav.sc .nl{{color:var(--brown)}}
+.nlinks{{display:flex;gap:2rem;list-style:none}}
+.nlinks a{{font-size:.63rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.75);text-decoration:none;transition:color .3s}}
+nav.sc .nlinks a{{color:var(--muted)}}
+.nlinks a:hover{{color:var(--gold)}}
+
+/* HERO */
+.hero{{height:100vh;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}}
+.hbg{{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(15,8,3,.18) 0%,rgba(15,8,3,.05) 35%,rgba(15,8,3,.55) 100%),url('{hero_src}') center 20%/cover no-repeat;transform:scale(1.04);transition:transform 5s ease-out}}
+.hbg.ld{{transform:scale(1)}}
+.hname{{font-family:'Tenor Sans',sans-serif;font-size:clamp(2.4rem,7vw,6.5rem);font-weight:400;color:#fff;letter-spacing:.48em;text-transform:uppercase;line-height:1.06;text-align:center;text-indent:.48em;opacity:0;transform:translateY(18px);animation:hf 1.6s .4s cubic-bezier(.22,1,.36,1) forwards}}
+.hrule{{display:flex;align-items:center;justify-content:center;gap:1rem;margin-top:1.3rem;opacity:0;animation:hf 1s 1.3s ease forwards}}
+.hrl{{width:48px;height:1px;background:rgba(212,170,120,.55)}}.hrd{{width:3px;height:3px;border-radius:50%;background:var(--gold-l)}}
+.hscroll{{position:absolute;bottom:1.6rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.4rem;opacity:0;animation:hf 1s 2s ease forwards}}
+.hscroll span{{font-size:.55rem;letter-spacing:.28em;text-transform:uppercase;color:rgba(255,255,255,.45)}}
+.sline{{width:1px;height:38px;background:linear-gradient(to bottom,rgba(212,170,120,.6),transparent);animation:sp 2.2s infinite}}
+@keyframes sp{{0%,100%{{opacity:.3}}50%{{opacity:1}}}}
+@keyframes hf{{to{{opacity:1;transform:translateY(0)}}}}
+
+/* SECTIONS */
+section{{padding:6rem 0}}.con{{max-width:1120px;margin:0 auto;padding:0 2.5rem}}
+.slabel{{font-size:.59rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:.85rem}}
+.fi{{opacity:0;transform:translateY(26px);transition:opacity .85s,transform .85s}}.fi.v{{opacity:1;transform:none}}
+
+/* ABOUT */
+.about{{background:var(--cream)}}
+.ab-in{{display:grid;grid-template-columns:1fr 1.55fr;gap:5rem;align-items:center}}
+.ab-wrap{{position:relative}}
+.ab-img{{width:100%;aspect-ratio:3/4;object-fit:cover;object-position:center top;display:block}}
+.ab-bdr{{position:absolute;top:-1rem;left:-1rem;right:1rem;bottom:1rem;border:1px solid var(--gold);pointer-events:none;opacity:.35}}
+.ab-stat{{position:absolute;bottom:-1.4rem;right:-1.4rem;background:var(--brown);color:var(--cream);padding:1.1rem 1.5rem;text-align:center}}
+.ab-n{{font-family:'Cormorant Garamond',serif;font-size:2rem;color:var(--gold-l);display:block;line-height:1}}
+.ab-l{{font-size:.57rem;letter-spacing:.2em;text-transform:uppercase;opacity:.6;margin-top:.22rem}}
+.ab-h{{font-family:'Cormorant Garamond',serif;font-size:clamp(1.7rem,2.8vw,2.5rem);font-weight:300;line-height:1.22;margin-bottom:1.8rem;color:var(--brown)}}
+.ab-h em{{font-style:italic;color:var(--brown-l)}}
+.ab-t p{{font-size:.85rem;line-height:1.95;color:var(--muted);margin-bottom:.95rem}}
+
+/* WHY */
+.why{{background:var(--brown);padding:6rem 0;overflow:hidden}}
+.why-t{{font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,3.8vw,3.3rem);font-weight:300;font-style:italic;color:var(--cream);text-align:center;margin-bottom:1rem}}
+.why-sub{{font-size:.82rem;line-height:1.8;color:rgba(250,246,240,.45);text-align:center;max-width:560px;margin:0 auto 4rem}}
+.why-g{{display:grid;grid-template-columns:1fr 1px 1fr;max-width:860px;margin:0 auto}}
+.why-dv{{background:rgba(184,145,90,.2)}}
+.why-c{{padding:0 3.2rem}}.why-c:first-child{{padding-left:0}}.why-c:last-child{{padding-right:0}}
+.why-ct{{font-size:.57rem;letter-spacing:.35em;text-transform:uppercase;color:var(--gold-l);margin-bottom:2rem}}
+.ws{{margin-bottom:2rem}}.ws:last-child{{margin-bottom:0}}
+.sh{{display:flex;align-items:baseline;gap:.28rem;margin-bottom:.38rem}}
+.wp{{font-family:'Cormorant Garamond',serif;font-size:2.3rem;font-weight:300;color:var(--gold-l);line-height:1}}
+.ps{{font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:var(--gold-l)}}
+.sbw{{height:1px;background:rgba(255,255,255,.06);margin-bottom:.55rem;overflow:hidden}}
+.sb{{height:100%;background:var(--gold);width:0%;transition:width 1.5s cubic-bezier(.22,1,.36,1);opacity:.6}}
+.wd{{font-size:.75rem;line-height:1.75;color:rgba(250,246,240,.4)}}
+
+/* PORTFOLIO */
+.port{{background:var(--bg);padding:7rem 0;overflow:hidden}}
+.port-hd{{text-align:center;margin-bottom:3.5rem}}
+.port-t{{font-family:'Cormorant Garamond',serif;font-size:clamp(1.6rem,3vw,2.4rem);font-weight:300;color:var(--brown)}}
+.pr{{display:flex;justify-content:center;gap:1.5rem;margin-bottom:1.5rem}}
+.pi{{position:relative;cursor:pointer;transition:transform .5s cubic-bezier(.34,1.56,.64,1);flex-shrink:0}}
+.pr:first-of-type .pi:nth-child(1){{transform:rotate(-3deg) translateY(5px)}}
+.pr:first-of-type .pi:nth-child(2){{transform:rotate(2deg) translateY(-4px)}}
+.pr:first-of-type .pi:nth-child(3){{transform:rotate(-1.5deg) translateY(7px)}}
+.pr:first-of-type .pi:nth-child(4){{transform:rotate(2.8deg) translateY(-2px)}}
+.pr:last-of-type .pi:nth-child(1){{transform:rotate(2.2deg) translateY(-4px)}}
+.pr:last-of-type .pi:nth-child(2){{transform:rotate(-1.8deg) translateY(6px)}}
+.pr:last-of-type .pi:nth-child(3){{transform:rotate(1.4deg) translateY(-3px)}}
+.pr:last-of-type .pi:nth-child(4){{transform:rotate(-2.5deg) translateY(4px)}}
+.pi:hover{{transform:rotate(0deg) translateY(-10px) scale(1.05) !important;z-index:10}}
+.pf{{width:138px;height:256px;background:#15100b;border-radius:23px;padding:8px;box-shadow:0 0 0 1px rgba(255,255,255,.06),0 16px 42px rgba(30,18,10,.3);position:relative}}
+.pn{{position:absolute;top:8px;left:50%;transform:translateX(-50%);width:38px;height:3px;background:#0c0907;border-radius:100px;z-index:2}}
+.ps2{{width:100%;height:100%;border-radius:16px;overflow:hidden;position:relative}}
+.ps2 img{{width:100%;height:100%;object-fit:cover;display:block}}
+.po{{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 55%,rgba(0,0,0,.4));opacity:0;transition:opacity .3s;display:flex;align-items:flex-end;padding:.65rem;border-radius:16px}}
+.pi:hover .po{{opacity:1}}
+.pp{{width:21px;height:21px;background:rgba(250,246,240,.9);border-radius:50%;display:flex;align-items:center;justify-content:center}}
+.pp svg{{width:7px;height:7px;fill:var(--brown);margin-left:1px}}
+
+/* BRANDS */
+.brands{{background:var(--cream);padding:5rem 0}}
+.br-t{{font-family:'Cormorant Garamond',serif;font-size:clamp(1.3rem,2.2vw,1.8rem);font-weight:300;color:var(--brown);text-align:center;margin-bottom:3rem;letter-spacing:.05em}}
+.br-s{{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:2rem 3.2rem}}
+.bl{{display:flex;align-items:center;justify-content:center;height:24px;filter:grayscale(1) opacity(.38) brightness(.45);transition:filter .4s;cursor:default}}
+.bl:hover{{filter:grayscale(0) opacity(.9) brightness(1)}}
+.bl img{{height:100%;width:auto;max-width:95px;object-fit:contain}}
+.bt{{font-family:'Tenor Sans',sans-serif;font-size:.65rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);opacity:.45;transition:opacity .3s,color .3s}}
+.bt:hover{{opacity:.9;color:var(--brown)}}
+
+/* SERVICES */
+.svc{{background:var(--bg);padding:6.5rem 0}}
+.svc-in{{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start}}
+.svc-h{{font-family:'Cormorant Garamond',serif;font-size:clamp(1.7rem,3vw,2.5rem);font-weight:300;color:var(--brown);line-height:1.2;margin-bottom:2rem}}
+.il{{font-size:.57rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem}}
+.ilist{{list-style:none;display:flex;flex-direction:column;gap:.7rem}}
+.ilist li{{display:flex;align-items:center;gap:.75rem;font-size:.82rem;color:var(--muted)}}
+.ilist li::before{{content:'';width:15px;height:1px;background:var(--gold);flex-shrink:0}}
+.pr2{{display:flex;justify-content:space-between;align-items:baseline;padding:1.2rem 0;border-bottom:1px solid var(--sand);position:relative}}
+.pr2::after{{content:'';position:absolute;bottom:-1px;left:0;width:0;height:1px;background:var(--gold);transition:width .4s}}
+.pr2:hover::after{{width:100%}}
+.pn2{{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:300;color:var(--brown)}}
+.pa{{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--brown)}}
+.pa.c{{font-family:'Jost',sans-serif;font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}}
+
+/* EXPECT */
+.exp{{background:var(--sand);padding:6rem 0}}
+.exp-g{{display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;margin-top:2.8rem}}
+.ei{{position:relative;padding-top:1.7rem}}
+.en{{position:absolute;top:0;left:0;font-family:'Cormorant Garamond',serif;font-size:2.7rem;color:rgba(184,145,90,.15);font-style:italic;line-height:1}}
+.et{{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:var(--brown);margin-bottom:.55rem}}
+.ed{{font-size:.78rem;line-height:1.8;color:var(--muted)}}
+
+/* TESTI */
+.test{{background:var(--cream);padding:6rem 0}}
+.test-t{{font-family:'Cormorant Garamond',serif;font-size:clamp(1.5rem,2.8vw,2.2rem);font-weight:300;font-style:italic;color:var(--brown);text-align:center;margin-bottom:3.8rem}}
+.test-g{{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem}}
+.tc{{background:var(--bg);padding:1.9rem;position:relative}}
+.tc::before{{content:'';position:absolute;top:0;left:1.9rem;width:24px;height:1.5px;background:var(--gold)}}
+.tstars{{display:flex;gap:2px;margin-bottom:1rem;margin-top:.75rem}}
+.star{{width:8px;height:8px;fill:var(--gold)}}.star.h{{fill:var(--sand)}}
+.tt{{font-family:'Cormorant Garamond',serif;font-size:.93rem;font-style:italic;line-height:1.85;color:var(--brown-l);margin-bottom:1.4rem}}
+.tn{{font-size:.66rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--brown);display:block}}
+.tb{{font-size:.59rem;letter-spacing:.08em;color:var(--gold);text-transform:uppercase}}
+
+/* CONTACT */
+.cta{{background:var(--brown);padding:6.5rem 0;text-align:center;position:relative;overflow:hidden}}
+.cta::before{{content:'AA';position:absolute;bottom:-3.5rem;right:-1rem;font-family:'Cormorant Garamond',serif;font-size:14rem;color:rgba(255,255,255,.02);pointer-events:none;font-style:italic}}
+.cta-t{{font-family:'Cormorant Garamond',serif;font-size:clamp(1.5rem,3.8vw,2.9rem);font-weight:300;font-style:italic;color:var(--cream);margin-bottom:1.1rem;line-height:1.25}}
+.cta-r{{width:30px;height:1px;background:var(--gold-l);margin:0 auto 2rem}}
+.cta-d{{display:flex;flex-direction:column;gap:.75rem;align-items:center}}
+.cl{{font-size:.78rem;letter-spacing:.1em;color:rgba(250,246,240,.5);text-decoration:none;transition:color .3s;display:flex;align-items:center;gap:.65rem}}
+.cl:hover{{color:var(--gold-l)}}
+.ci{{width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:1.5;opacity:.5}}
+
+footer{{background:#1e0f08;padding:1.5rem 2.5rem;display:flex;justify-content:space-between;align-items:center}}
+.fl{{font-family:'Great Vibes',cursive;font-size:1.1rem;color:var(--gold-l);opacity:.55}}
+.fc{{font-size:.57rem;letter-spacing:.15em;color:rgba(250,246,240,.18);text-transform:uppercase}}
+
+/* MODAL */
+.mo{{position:fixed;inset:0;background:rgba(12,6,2,.97);z-index:999;display:none;align-items:center;justify-content:center;backdrop-filter:blur(10px)}}
+.mo.op{{display:flex}}
+.mc{{position:absolute;top:1.7rem;right:1.7rem;width:38px;height:38px;background:rgba(250,246,240,.07);border:none;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s}}
+.mc:hover{{background:rgba(250,246,240,.15)}}
+.mc svg{{width:13px;height:13px;stroke:var(--cream);stroke-width:2;fill:none}}
+.mp{{width:245px;height:475px;background:#14100b;border-radius:32px;padding:10px;box-shadow:0 0 0 1.5px rgba(255,255,255,.06),0 35px 80px rgba(0,0,0,.7)}}
+.ms{{width:100%;height:100%;border-radius:23px;overflow:hidden}}
+.ms img{{width:100%;height:100%;object-fit:cover}}
+
+@media(max-width:800px){{
+  nav{{padding:.9rem 1.4rem}}.nlinks{{display:none}}.con{{padding:0 1.3rem}}
+  .ab-in{{grid-template-columns:1fr;gap:3.2rem}}.ab-stat{{right:0;bottom:-1.3rem}}
+  .why-g{{grid-template-columns:1fr;gap:2.2rem}}.why-dv{{display:none}}.why-c{{padding:0}}
+  .pr{{gap:.8rem;overflow-x:auto;justify-content:flex-start;padding:.4rem 1.3rem;scrollbar-width:none}}
+  .pr::-webkit-scrollbar{{display:none}}.pf{{width:112px;height:205px}}
+  .svc-in{{grid-template-columns:1fr;gap:3.2rem}}
+  .exp-g{{grid-template-columns:1fr 1fr}}.test-g{{grid-template-columns:1fr}}
+  footer{{flex-direction:column;gap:.65rem;text-align:center}}
+}}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <a href="#" class="nl">Aisha Abbas</a>
+  <ul class="nlinks">
+    <li><a href="#about">About</a></li>
+    <li><a href="#portfolio">Portfolio</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<section class="hero" id="home">
+  <div class="hbg" id="hbg"></div>
+  <div style="position:relative;z-index:2;text-align:center;">
+    <h1 class="hname">Aisha<br>Abbas</h1>
+    <div class="hrule"><div class="hrl"></div><div class="hrd"></div><div class="hrl"></div></div>
+  </div>
+  <div class="hscroll"><span>Scroll</span><div class="sline"></div></div>
+</section>
+
+<section class="about" id="about">
+  <div class="con">
+    <div class="ab-in">
+      <div class="ab-wrap fi">
+        <img src="{portrait_src}" alt="Aisha Abbas" class="ab-img">
+        <div class="ab-bdr"></div>
+        <div class="ab-stat"><span class="ab-n">20+</span><span class="ab-l">Countries</span></div>
+      </div>
+      <div class="ab-t fi">
+        <div class="slabel">About</div>
+        <h2 class="ab-h">Crafting stories<br><em>that feel real</em></h2>
+        <p>I'm a UGC content creator focused on capturing authentic, aesthetic moments that feel natural and inspiring.</p>
+        <p>I've explored 20+ countries across Africa, Asia, and Europe, turning real experiences into immersive, story-driven content.</p>
+        <p>I work with brands to create effortless, on-location visuals that connect with audiences and leave a lasting impression.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="why" id="why">
+  <div class="con">
+    <h2 class="why-t fi">"People trust people."</h2>
+    <p class="why-sub fi">UGC is powerful because people trust people. Authentic content creates stronger connections, builds trust, and influences decisions in a natural way.</p>
+    <div class="why-g">
+      <div class="why-c fi">
+        <div class="why-ct">For Brands</div>
+        <div class="ws"><div class="sh"><span class="wp" data-target="92">0</span><span class="ps">%</span></div><div class="sbw"><div class="sb" data-width="92"></div></div><p class="wd">of customers look for reviews before purchasing.</p></div>
+        <div class="ws"><div class="sh"><span class="wp" data-target="87">0</span><span class="ps">%</span></div><div class="sbw"><div class="sb" data-width="87"></div></div><p class="wd">of brands actively use UGC in their strategy.</p></div>
+        <div class="ws"><div class="sh"><span class="wp" data-target="72">0</span><span class="ps">%</span></div><div class="sbw"><div class="sb" data-width="72"></div></div><p class="wd">of consumers say UGC builds stronger brand trust.</p></div>
+      </div>
+      <div class="why-dv"></div>
+      <div class="why-c fi">
+        <div class="why-ct">For Clients</div>
+        <div class="ws"><div class="sh"><span class="wp" data-target="60">0</span><span class="ps">%</span></div><div class="sbw"><div class="sb" data-width="60"></div></div><p class="wd">trust real customers more than traditional ads.</p></div>
+        <div class="ws"><div class="sh"><span class="wp" data-target="64">0</span><span class="ps">%</span></div><div class="sbw"><div class="sb" data-width="64"></div></div><p class="wd">search for authentic reviews before buying.</p></div>
+        <div class="ws"><div class="sh"><span class="wp" data-target="50">0</span><span class="ps">%</span></div><div class="sbw"><div class="sb" data-width="50"></div></div><p class="wd">want real customer content over brand campaigns.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="port" id="portfolio">
+  <div class="port-hd fi">
+    <div class="slabel" style="text-align:center">Portfolio</div>
+    <h2 class="port-t">Visual Stories</h2>
+  </div>
+  <div>
+    <div class="pr">
+      <div class="pi" onclick="openModal(0)"><div class="pf"><div class="pn"></div><div class="ps2"><img src="{p[0]}" alt=""></div><div class="po"><div class="pp"><svg viewBox="0 0 10 12"><polygon points="1,0 10,6 1,12"/></svg></div></div></div></div>
+      <div class="pi" onclick="openModal(1)"><div class="pf"><div class="pn"></div><div class="ps2"><img src="{p[1]}" alt=""></div><div class="po"><div class="pp"><svg viewBox="0 0 10 12"><polygon points="1,0 10,6 1,12"/></svg></div></div></div></div>
+      <div class="pi" onclick="openModal(2)"><div class="pf"><div class="pn"></div><div class="ps2"><img src="{p[2]}" alt=""></div><div class="po"><div class="pp"><svg viewBox="0 0 10 12"><polygon points="1,0 10,6 1,12"/></svg></div></div></div></div>
+      <div class="pi" onclick="openModal(3)"><div class="pf"><div class="pn"></div><div class="ps2"><img src="{p[3]}" alt=""></div><div class="po"><div class="pp"><svg viewBox="0 0 10 12"><polygon points="1,0 10,6 1,12"/></svg></div></div></div></div>
+    </div>
+    <div class="pr">
+      <div class="pi" onclick="openModal(4)"><div class="pf"><div class="pn"></div><div class="ps2"><img src="{p[4]}" alt=""></div><div class="po"><div class="pp"><svg viewBox="0 0 10 12"><polygon points="1,0 10,6 1,12"/></svg></div></div></div></div>
+      <div class="pi" onclick="openModal(5)"><div class="pf"><div class="pn"></div><div class="ps2"><img src="{p[5]}" alt=""></div><div class="po"><div class="pp"><svg viewBox="0 0 10 12"><polygon points="1,0 10,6 1,12"/></svg></div></div></div></div>
+      <div class="pi" onclick="openModal(6)"><div class="pf"><div class="pn"></div><div class="ps2"><img src="{p[6]}" alt=""></div><div class="po"><div class="pp"><svg viewBox="0 0 10 12"><polygon points="1,0 10,6 1,12"/></svg></div></div></div></div>
+      <div class="pi" onclick="openModal(7)"><div class="pf"><div class="pn"></div><div class="ps2"><img src="{p[7]}" alt=""></div><div class="po"><div class="pp"><svg viewBox="0 0 10 12"><polygon points="1,0 10,6 1,12"/></svg></div></div></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="brands" id="brands">
+  <div class="con">
+    <div class="slabel" style="text-align:center" class="fi">Collaborations</div>
+    <h2 class="br-t fi">Brands I've worked with</h2>
+    <div class="br-s fi">
+      <div class="bl" title="Airbnb">
+        <svg xmlns="http://www.w3.org/2000/svg" height="22" viewBox="0 0 3000 1000" fill="#FF5A5F"><path d="M1500 103c-114 0-206 93-206 206s92 205 206 205 206-92 206-205-92-206-206-206zm0 350c-79 0-144-64-144-144s65-144 144-144 144 65 144 144-65 144-144 144zm0 60c-100 0-344 48-344 180v77h688v-77c0-132-244-180-344-180zm282 195H1218v-15c0-78 168-118 282-118s282 40 282 118v15zM606 513c114 0 206-92 206-205S720 103 606 103 400 195 400 308s92 205 206 205zm0-350c79 0 144 65 144 144s-65 144-144 144-144-65-144-144 65-144 144-144zm-282 545c0-132 244-180 344-180 38 0 80 5 120 15l45-52c-51-14-107-22-165-22-100 0-344 48-344 180v77h202v-62l-202 1v-12zm1788-180c-58 0-114 8-165 22l45 52c40-10 82-15 120-15 100 0 344 48 344 180v12l-202-1v62h202v-77c0-132-244-180-344-180zm-118-15c114 0 206-92 206-205s-92-205-206-205-206 93-206 205 92 205 206 205zm0-350c79 0 144 65 144 144s-65 144-144 144-144-65-144-144 65-144 144-144z"/><text x="50" y="850" font-family="Circular,Arial,sans-serif" font-size="200" font-weight="700" fill="#484848">airbnb</text></svg>
+      </div>
+      <div class="bl" title="Wyndham" style="height:19px;"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Wyndham_Hotels_%26_Resorts_logo.svg/320px-Wyndham_Hotels_%26_Resorts_logo.svg.png" alt="Wyndham" style="height:100%;width:auto"></div>
+      <div class="bl" title="Gisou" style="height:17px;">
+        <svg viewBox="0 0 80 17" height="17" fill="#2c1f0e"><text x="0" y="13" font-family="Georgia,serif" font-size="13" letter-spacing="2.5">gisou</text></svg>
+      </div>
+      <div class="bl" title="Trip.com" style="height:20px;"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Trip.com_logo.svg/200px-Trip.com_logo.svg.png" alt="Trip.com" style="height:100%;width:auto"></div>
+      <div class="bl" title="Coffee Bean" style="height:28px;"><img src="https://upload.wikimedia.org/wikipedia/en/thumb/f/f5/Coffee_Bean_and_Tea_Leaf_Logo.svg/200px-Coffee_Bean_and_Tea_Leaf_Logo.svg.png" alt="Coffee Bean" style="height:100%;width:auto" onerror="this.parentElement.innerHTML=\'<span class=bt>Coffee Bean</span>\'"></div>
+      <div class="bl" title="%Arabica" style="height:16px;">
+        <svg viewBox="0 0 95 16" height="16" fill="#1c1208"><text x="0" y="13" font-family="Georgia,serif" font-size="12" letter-spacing="2">%Arabica</text></svg>
+      </div>
+      <span class="bt">12GO</span>
+      <span class="bt">The Leaf</span>
+      <div class="bl" title="El&amp;N London" style="height:20px;"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/El%26N_London_logo.svg/200px-El%26N_London_logo.svg.png" alt="El&amp;N" style="height:100%;width:auto" onerror="this.parentElement.innerHTML=\'<span class=bt>El&amp;N London</span>\'"></div>
+    </div>
+  </div>
+</section>
+
+<section class="svc" id="services">
+  <div class="con">
+    <div class="svc-in">
+      <div class="fi">
+        <div class="slabel">Services</div>
+        <h2 class="svc-h">Simple,<br>transparent<br><em style="font-style:italic">pricing.</em></h2>
+        <div style="margin-top:2rem">
+          <div class="il">Every package includes</div>
+          <ul class="ilist">
+            <li>Full usage rights</li><li>Delivery within 14 days</li>
+            <li>Fully edited videos</li><li>On-location shoots</li>
+          </ul>
+        </div>
+      </div>
+      <div class="fi">
+        <div class="pr2"><span class="pn2">Edited Video</span><span class="pa">€65</span></div>
+        <div class="pr2"><span class="pn2">Raw Footage</span><span class="pa">€45</span></div>
+        <div class="pr2"><span class="pn2">Bundle — 3 Videos</span><span class="pa">€180</span></div>
+        <div class="pr2"><span class="pn2">Monthly Social Media</span><span class="pa c">Custom</span></div>
+        <div class="pr2"><span class="pn2">Other Collaborations</span><span class="pa c">Custom</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="exp" id="expect">
+  <div class="con">
+    <div class="slabel fi">Process</div>
+    <h2 class="fi" style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.7rem,3vw,2.4rem);font-weight:300;color:var(--brown)">What to expect</h2>
+    <div class="exp-g">
+      <div class="ei fi"><span class="en">01</span><div class="et">Fast Delivery</div><p class="ed">All content within 14 days — no long waits.</p></div>
+      <div class="ei fi"><span class="en">02</span><div class="et">High-Quality Visuals</div><p class="ed">Cinematic, editorial-grade footage with precision.</p></div>
+      <div class="ei fi"><span class="en">03</span><div class="et">Luxury Storytelling</div><p class="ed">Every frame crafted to feel like a campaign.</p></div>
+      <div class="ei fi"><span class="en">04</span><div class="et">Authentic Content</div><p class="ed">Natural, story-driven — never overly commercial.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="test" id="testimonials">
+  <div class="con">
+    <h2 class="test-t fi">Honest words</h2>
+    <div class="test-g">
+      <div class="tc fi">
+        <div class="tstars"><svg class="star" viewBox="0 0 12 12"><polygon points="6,0 7.5,4.5 12,4.5 8.5,7 9.7,12 6,9 2.3,12 3.5,7 0,4.5 4.5,4.5"/></svg><svg class="star" viewBox="0 0 12 12"><polygon points="6,0 7.5,4.5 12,4.5 8.5,7 9.7,12 6,9 2.3,12 3.5,7 0,4.5 4.5,4.5"/></svg><svg class="star" viewBox="0 0 12 12"><polygon points="6,0 7.5,4.5 12,4.5 8.5,7 9.7,12 6,9 2.3,12 3.5,7 0,4.5 4.5,4.5"/></svg><svg class="star" viewBox="0 0 12 12"><polygon points="6,0 7.5,4.5 12,4.5 8.5,7 9.7,12 6,9 2.3,12 3.5,7 0,4.5 4.5,4.5"/></svg><svg class="star h" viewBox="0 0 12 12"><polygon points="6,0 7.5,4.5 12,4.5 8.5,7 9.7,12 6,9 2.3,12 3.5,7 0,4.5 4.5,4.5"/></svg></div>
+        <p class="tt">"Aisha captured the essence of The Leaf beautifully. It felt natural, not forced — our engagement genuinely improved."</p>
+        <span class="tn">Ema</span><span class="tb">The Leaf</span>
+      </div>
+      <div class="tc fi">
+        <div class="tstars"><svg class="star" viewBox="0 0 12 12"><polygon points="6,0 7.5,4.5 12,4.5 8.5,7 9.7,12 6,9 2.3,12 3.5,7 0,4.5 4.5,4.5"/></svg><svg class="star" viewBox="0 0 12 12"><polygon points="6,0 7.5,4.5 12,4.5 8.5,7 9.7,12 6,9 2.3,12 3.5,7 0,4.5 4.5,4.5"/></svg><svg class="star" viewBox="0 0 12 12"><polygon points="6,0 7.5,4.5 12,4.5 8.5,7 9.7,12 6,9 2.3,12 3.5,7 0,4.5 4.5,4.5"/></svg><svg class="star" viewBox="0 0 12 12"><polygon points="6,0 7.5,4.5 12,4.5 8.5,7 9.7,12 6,9 2.3,12 3.5,7 0,4.5 4.5,4.5"/></svg><svg class="star" viewBox="0 0 12 12"><polygon points="6,0 7.5,4.5 12,4.5 8.5,7 9.7,12 6,9 2.3,12 3.5,7 0,4.5 4.5,4.5"/></svg></div>
+        <p class="tt">"Seamless from start to finish. She understood our brand instantly and delivered fast. We'll definitely work together again."</p>
+        <span class="tn">Jennifer</span><span class="tb">Be Zanzibar</span>
+      </div>
+      <div class="tc fi">
+        <div class="tstars"><svg class="star" viewBox="0 0 12 12"><polygon points="6,0 7.5,4.5 12,4.5 8.5,7 9.7,12 6,9 2.3,12 3.5,7 0,4.5 4.5,4.5"/></svg><svg class="star" viewBox="0 0 12 12"><polygon points="6,0 7.5,4.5 12,4.5 8.5,7 9.7,12 6,9 2.3,12 3.5,7 0,4.5 4.5,4.5"/></svg><svg class="star" viewBox="0 0 12 12"><polygon points="6,0 7.5,4.5 12,4.5 8.5,7 9.7,12 6,9 2.3,12 3.5,7 0,4.5 4.5,4.5"/></svg><svg class="star" viewBox="0 0 12 12"><polygon points="6,0 7.5,4.5 12,4.5 8.5,7 9.7,12 6,9 2.3,12 3.5,7 0,4.5 4.5,4.5"/></svg><svg class="star h" viewBox="0 0 12 12"><polygon points="6,0 7.5,4.5 12,4.5 8.5,7 9.7,12 6,9 2.3,12 3.5,7 0,4.5 4.5,4.5"/></svg></div>
+        <p class="tt">"Didn't expect the quality to be this cinematic. Customers kept asking who filmed it — that says everything."</p>
+        <span class="tn">Leonard van Gaard</span><span class="tb">Chocolate Cafe</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta" id="contact">
+  <div class="con" style="position:relative;z-index:2">
+    <div class="slabel" style="color:var(--gold-l);text-align:center">Get in touch</div>
+    <h2 class="cta-t fi">"Let's create something<br>beautiful together."</h2>
+    <div class="cta-r fi"></div>
+    <div class="cta-d fi">
+      <a href="mailto:Aisha.ali1346@gmail.com" class="cl">
+        <svg class="ci" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Aisha.ali1346@gmail.com
+      </a>
+      <a href="tel:+971527443416" class="cl">
+        <svg class="ci" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.86 12a19.79 19.79 0 01-3.07-8.67A2 2 0 012.77 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 8.75a16 16 0 006.29 6.29l1.1-1.1a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+        +971 527 443 416
+      </a>
+      <a href="https://wa.me/31687849311" class="cl" target="_blank">
+        <svg class="ci" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+        WhatsApp: +31 6 87849311
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span class="fl">Aisha Abbas</span>
+  <span class="fc">© 2025 Aisha Abbas · All rights reserved</span>
+</footer>
+
+<div class="mo" id="modal" onclick="hmc(event)">
+  <button class="mc" onclick="cm()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  <div class="mp"><div class="ms" id="ms"></div></div>
+</div>
+
+<script>
+const imgs={json.dumps(p)};
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>nav.classList.toggle('sc',scrollY>50));
+const hbg=document.getElementById('hbg');
+setTimeout(()=>hbg.classList.add('ld'),80);
+window.addEventListener('scroll',()=>{{ if(scrollY<innerHeight) hbg.style.transform=`translateY(${{scrollY*.25}}px)`; }});
+const obs=new IntersectionObserver(e=>e.forEach(x=>{{if(x.isIntersecting){{x.target.classList.add('v');obs.unobserve(x.target)}}}}),{{threshold:.1}});
+document.querySelectorAll('.fi').forEach(el=>obs.observe(el));
+const so=new IntersectionObserver(e=>e.forEach(x=>{{if(x.isIntersecting){{
+  x.target.querySelectorAll('[data-target]').forEach(el=>{{
+    const t=+el.dataset.target;let c=0;
+    const r=setInterval(()=>{{c=Math.min(c+t/60,t);el.textContent=Math.floor(c);if(c>=t)clearInterval(r);}},20);
+  }});
+  setTimeout(()=>x.target.querySelectorAll('.sb[data-width]').forEach(b=>b.style.width=b.dataset.width+'%'),200);
+  so.unobserve(x.target);
+}}}})},{{threshold:.2}});
+document.querySelectorAll('.why').forEach(el=>so.observe(el));
+function openModal(i){{document.getElementById('ms').innerHTML=`<img src="${{imgs[i]}}" alt="">`;document.getElementById('modal').classList.add('op');document.body.style.overflow='hidden'}}
+function cm(){{document.getElementById('modal').classList.remove('op');document.body.style.overflow=''}}
+function hmc(e){{if(e.target===document.getElementById('modal'))cm()}}
+document.addEventListener('keydown',e=>{{if(e.key==='Escape')cm()}});
+</script>
+</body>
+</html>'''
+
+with open('/home/claude/portfolio_final.html','w') as f:
+    f.write(html)
+print("Done, size:", len(html)//1024, "KB")
+EOF
+Done
+
+You are out of free messages until 10:50 PM
